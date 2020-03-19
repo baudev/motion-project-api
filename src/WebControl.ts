@@ -1,13 +1,11 @@
-import {throws} from "assert";
-
 const fetch = require("node-fetch");
 
 export class WebControl {
 
-    public static url = "http://192.168.1.68:7999";
+    private static _url: string;
 
     private static request(route: string){
-        return fetch(WebControl.url + "/" + route)
+        return fetch(WebControl._url + "/" + route)
             .then((res: Response) => res.text());
     }
 
@@ -49,6 +47,14 @@ export class WebControl {
      */
     public static async getSnapshot(cameraId: number) {
         return WebControl.request(cameraId + "/action/snapshot");
+    }
+
+    /**
+     * Setter for server URL
+     * @param value
+     */
+    static set url(value: string) {
+        this._url = value;
     }
 
 }

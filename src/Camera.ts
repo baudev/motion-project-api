@@ -40,7 +40,7 @@ export class Camera {
     /**
      * Return the current status of the camera.
      */
-    public getCurrentStatus() {
+    public getCurrentStatus(): Promise<MotionDetectionStatus> {
         return WebControl.getDetectionStatus(this.id)
             .then((message) => {
                 return new RegExp(/Detection status ACTIVE/).test(message) ? MotionDetectionStatus.ENABLE : MotionDetectionStatus.DISABLE;
