@@ -1,0 +1,32 @@
+{
+  "name": "motion-project-api",
+  "version": "1.0.0",
+  "description": "API for https://motion-project.github.io/",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rm -rf build/ && tsc",
+    "install": "npm run build",
+    "start": "npm run build && node build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baudev/motion-project-api.git"
+  },
+  "keywords": [
+    "API",
+    "Motion",
+    "Project"
+  ],
+  "author": "Baudev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/baudev/motion-project-api/issues"
+  },
+  "homepage": "https://github.com/baudev/motion-project-api#readme",
+  "dependencies": {
+    "@types/node": "^13.9.2",
+    "typescript": "^3.8.3"
+  }
+}
