@@ -56,3 +56,7 @@ Return the current status of the camera. `MotionDetectionStatus.ENABLE` is enabl
 **getConnectionStatus(): Promise<MotionConnectionStatus>**
 
 Return the connection status of the camera. `MotionConnectionStatus.OK` if well connected otherwise `MotionConnectionStatus.DISCONNECTED`.
+
+**getFilesTargetDir(): Promise<string>**
+
+Return the files target directory.

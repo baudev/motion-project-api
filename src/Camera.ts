@@ -9,15 +9,21 @@ export class Camera {
      */
     private _id: number;
 
-    constructor(id: number) {
+    /**
+     * Webcontrol instance
+     */
+    private _webControl: WebControl;
+
+    constructor(id: number, webControl: WebControl) {
         this._id = id;
+        this._webControl = webControl;
     }
 
     /**
      * Start or resume motion detection.
      */
     public startMotionDetection(): Promise<void> {
-        return WebControl.setDetectionStart(this.id)
+        return this.webControl.setDetectionStart(this.id)
             .then(() => {return;});
     }
 
@@ -25,23 +31,25 @@ export class Camera {
      * Pause the motion detection.
      */
     public pauseMotionDetection(): Promise<void> {
-        return WebControl.setDetectionPause(this.id)
+        return this.webControl.setDetectionPause(this.id)
             .then(() => {return;});
     }
 
     /**
      * Create a snapshot
      */
-    public createSnapshot(): Promise<void> {
-        return WebControl.getSnapshot(this.id)
-            .then(() => {return;});
+    public createSnapshot(): Promise<string> {
+        return this.webControl.getSnapshot(this.id)
+            .then(async () => {
+                return await this.getFilesTargetDir() + "/lastsnap.jpg";
+            });
     }
 
     /**
      * Return the current status of the camera.
      */
     public getCurrentStatus(): Promise<MotionDetectionStatus> {
-        return WebControl.getDetectionStatus(this.id)
+        return this.webControl.getDetectionStatus(this.id)
             .then((message) => {
                 return new RegExp(/Detection status ACTIVE/).test(message) ? MotionDetectionStatus.ENABLE : MotionDetectionStatus.DISABLE;
             })
@@ -51,9 +59,21 @@ export class Camera {
      * Return the connection status of the camera.
      */
     public getConnectionStatus(): Promise<MotionConnectionStatus> {
-        return WebControl.getDetectionConnection(this.id)
+        return this.webControl.getDetectionConnection(this.id)
             .then((message) => {
                 return new RegExp(/Camera Connection OK/).test(message) ? MotionConnectionStatus.OK : MotionConnectionStatus.DISCONNECTED;
+            })
+    }
+
+    /**
+     * Returns the files target directory.
+     */
+    public getFilesTargetDir(): Promise<string> {
+        return this.webControl.getConfigList(this.id)
+            .then((response) => {
+                let regex = /target_dir = (.+) /;
+                let match = regex.exec(response);
+                return match && match[1] ? match[1] : "/var/lib/motion/Camera" + this.id
             })
     }
 
@@ -63,5 +83,13 @@ export class Camera {
 
     set id(value: number) {
         this._id = value;
+    }
+
+    get webControl(): WebControl {
+        return this._webControl;
+    }
+
+    set webControl(value: WebControl) {
+        this._webControl = value;
     }
 }
