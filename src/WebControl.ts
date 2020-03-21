@@ -22,14 +22,6 @@ export class WebControl {
     }
 
     /**
-     * Write the current parameters to the file.
-     * @param cameraId
-     */
-    public async writeConfig(cameraId: number) {
-        return this.request(cameraId + "/config/write");
-    }
-
-    /**
      * Set the value for the requested parameter
      * @param cameraId
      * @param parm
@@ -48,6 +40,13 @@ export class WebControl {
         return this.request(cameraId + "/config/get?query=" + parm);
     }
 
+    /**
+     * Write the current parameters to the file.
+     * @param cameraId
+     */
+    public async writeConfig(cameraId: number) {
+        return this.request(cameraId + "/config/write");
+    }
 
     /**
      * Return the current status of the camera.
@@ -99,6 +98,22 @@ export class WebControl {
     }
 
     /**
+     * Create a snapshot
+     * @param cameraId
+     */
+    public async getSnapshot(cameraId: number) {
+        return this.request(cameraId + "/action/snapshot");
+    }
+
+    /**
+     * Shutdown and restart Motion
+     * @param cameraId
+     */
+    public async restart(cameraId: number) {
+        return this.request(cameraId + "/action/restart")
+    }
+
+    /**
      * Close all connections to the camera
      * @param cameraId
      */
@@ -112,13 +127,6 @@ export class WebControl {
      */
     public async end(cameraId: number) {
         return this.request(cameraId + "/action/end");
-    }
-    /**
-     * Create a snapshot
-     * @param cameraId
-     */
-    public async getSnapshot(cameraId: number) {
-        return this.request(cameraId + "/action/snapshot");
     }
     
     get url(): string {

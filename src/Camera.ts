@@ -20,35 +20,54 @@ export class Camera {
     }
 
     /**
-     * Start or resume motion detection.
+     * Lists all the configuration values for the camera.
      */
-    public startMotionDetection(): Promise<void> {
-        return this.webControl.setDetectionStart(this.id)
-            .then(() => {return;});
+    public getConfigList(): Promise<string> {
+        return this.webControl.getConfigList(this.id);
     }
 
     /**
-     * Pause the motion detection.
+     * Set the value for the requested parameter.
+     * @param parm
+     * @param value1
      */
-    public pauseMotionDetection(): Promise<void> {
-        return this.webControl.setDetectionPause(this.id)
-            .then(() => {return;});
+    public setConfig(parm: string, value1: string): Promise<void> {
+        return new Promise<void>(((resolve, reject) => {
+            this.webControl.setConfig(this.id, parm, value1)
+                .then((res) => {
+                    return new RegExp(/Done/).test(res) ? resolve() : reject();
+                })
+                .catch((err) => reject(err));
+        }));
     }
 
     /**
-     * Create a snapshot
+     * Return the value currently set for the parameter.
+     * @param parm
      */
-    public createSnapshot(): Promise<string> {
-        return this.webControl.getSnapshot(this.id)
-            .then(async () => {
-                return await this.getFilesTargetDir() + "/lastsnap.jpg";
-            });
+    public getConfig(parm: string): Promise<string> {
+        return new Promise<string>(((resolve, reject) => {
+            return this.webControl.getConfig(this.id, parm)
+                .then((response) => {
+                    let regex = /= (.+) /;
+                    let match = regex.exec(response);
+                    return match && match[1] ? resolve(match[1]) : reject()
+                })
+                .catch((err) => reject(err));
+        }));
+    }
+
+    /**
+     * Write the current parameters to the file.
+     */
+    public writeConfig(): Promise<string> {
+        return this.webControl.writeConfig(this.id);
     }
 
     /**
      * Return the current status of the camera.
      */
-    public getCurrentStatus(): Promise<MotionDetectionStatus> {
+    public getDetectionStatus(): Promise<MotionDetectionStatus> {
         return this.webControl.getDetectionStatus(this.id)
             .then((message) => {
                 return new RegExp(/Detection status ACTIVE/).test(message) ? MotionDetectionStatus.ENABLE : MotionDetectionStatus.DISABLE;
@@ -66,15 +85,62 @@ export class Camera {
     }
 
     /**
-     * Returns the files target directory.
+     * Start or resume motion detection.
      */
-    public getFilesTargetDir(): Promise<string> {
-        return this.webControl.getConfigList(this.id)
-            .then((response) => {
-                let regex = /target_dir = (.+) /;
-                let match = regex.exec(response);
-                return match && match[1] ? match[1] : "/var/lib/motion/Camera" + this.id
-            })
+    public startDetection(): Promise<string> {
+        return this.webControl.setDetectionStart(this.id);
+    }
+
+    /**
+     * Pause the motion detection.
+     */
+    public pauseDetection(): Promise<string> {
+        return this.webControl.setDetectionPause(this.id);
+    }
+
+    /**
+     * Trigger a new event.
+     */
+    public startEvent(): Promise<string> {
+        return this.webControl.startEvent(this.id);
+    }
+
+    /**
+     * Trigger the end of a event.
+     */
+    public endEvent(): Promise<string> {
+        return this.webControl.endEvent(this.id);
+    }
+
+    /**
+     * Create a snapshot.
+     */
+    public createSnapshot(): Promise<string> {
+        return this.webControl.getSnapshot(this.id)
+            .then(async () => {
+                return await this.getConfig("target_dir") + "/lastsnap.jpg";
+            });
+    }
+
+    /**
+     * Shutdown and restart Motion.
+     */
+    public restart(): Promise<string> {
+        return this.webControl.restart(this.id);
+    }
+
+    /**
+     * Close all connections to the camera.
+     */
+    public quit(): Promise<string> {
+        return this.webControl.quit(this.id);
+    }
+
+    /**
+     * Entirely shutdown the Motion application.
+     */
+    public end(): Promise<string> {
+        return this.webControl.end(this.id);
     }
 
     get id(): number {
