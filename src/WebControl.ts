@@ -14,6 +14,42 @@ export class WebControl {
     }
 
     /**
+     * Lists all the configuration values for the camera.
+     * @param cameraId
+     */
+    public async getConfigList(cameraId: number) {
+        return this.request(cameraId + "/config/list");
+    }
+
+    /**
+     * Write the current parameters to the file.
+     * @param cameraId
+     */
+    public async writeConfig(cameraId: number) {
+        return this.request(cameraId + "/config/write");
+    }
+
+    /**
+     * Set the value for the requested parameter
+     * @param cameraId
+     * @param parm
+     * @param value1
+     */
+    public async setConfig(cameraId: number, parm: string, value1: string) {
+        return this.request(cameraId + "/config/set?" + parm + "=" + value1);
+    }
+
+    /**
+     * Return the value currently set for the parameter.
+     * @param cameraId
+     * @param parm
+     */
+    public async getConfig(cameraId: number, parm: string) {
+        return this.request(cameraId + "/config/get?query=" + parm);
+    }
+
+
+    /**
      * Return the current status of the camera.
      * @param cameraId
      */
@@ -45,20 +81,44 @@ export class WebControl {
         return this.request(cameraId + "/detection/pause");
     }
 
+
+    /**
+     * Trigger a new event.
+     * @param cameraId
+     */
+    public async startEvent(cameraId: number) {
+        return this.request(cameraId + "/action/eventstart");
+    }
+
+    /**
+     * Trigger the end of a event.
+     * @param cameraId
+     */
+    public async endEvent(cameraId: number) {
+        return this.request(cameraId + "/action/eventend");
+    }
+
+    /**
+     * Close all connections to the camera
+     * @param cameraId
+     */
+    public async quit(cameraId: number) {
+        return this.request(cameraId + "/action/quit");
+    }
+
+    /**
+     * Entirely shutdown the Motion application
+     * @param cameraId
+     */
+    public async end(cameraId: number) {
+        return this.request(cameraId + "/action/end");
+    }
     /**
      * Create a snapshot
      * @param cameraId
      */
     public async getSnapshot(cameraId: number) {
         return this.request(cameraId + "/action/snapshot");
-    }
-
-    /**
-     * Lists all the configuration values for the camera.
-     * @param cameraId
-     */
-    public async getConfigList(cameraId: number) {
-        return this.request(cameraId + "/config/list");
     }
     
     get url(): string {
