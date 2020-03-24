@@ -44,7 +44,7 @@ class Camera {
         return new Promise(((resolve, reject) => {
             return this.webControl.getConfig(this.id, parm)
                 .then((response) => {
-                let regex = /= (.+) /;
+                let regex = /= (.+)/;
                 let match = regex.exec(response);
                 return match && match[1] ? resolve(match[1]) : reject();
             })
