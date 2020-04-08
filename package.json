@@ -1,6 +1,6 @@
 {
   "name": "motion-project-api",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "API for https://motion-project.github.io/",
   "main": "build/MotionApi.js",
   "types": "build/MotionApi.d.ts",
