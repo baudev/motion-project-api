@@ -5,7 +5,8 @@
   "main": "build/MotionApi.js",
   "types": "build/MotionApi.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "postinstall": "npm run build"
   },
   "repository": {
     "type": "git",
