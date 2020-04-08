@@ -6,7 +6,7 @@
   "types": "build/MotionApi.d.ts",
   "scripts": {
     "build": "tsc",
-    "postinstall": "npm run build"
+    "preinstall": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,5 +28,8 @@
     "lodash": "^4.17.15",
     "node-fetch": "^2.6.0",
     "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.5"
   }
 }

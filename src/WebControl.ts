@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+import fetch, {Response} from "node-fetch";
 
 export class WebControl {
 
